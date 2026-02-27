@@ -114,7 +114,7 @@ function Landing() {
                     </div>
 
                     {/* Contenedor del Collage con degradado inferior */}
-                    <div className="relative flex justify-center gap-4 px-4 h-[450px] overflow-hidden">
+                    <div className="relative flex justify-center gap-4 px-4 h-112.5 overflow-hidden">
                         {collageImages.map((column, colIndex) => (
                             <div
                                 key={colIndex}
@@ -132,7 +132,7 @@ function Landing() {
                         ))}
 
                         {/* Capa de degradado para desvanecer las imágenes (Efecto Pinterest) */}
-                        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-white via-white/80 to-transparent z-10"></div>
                     </div>
 
                     {/* Franja Amarilla Inferior */}

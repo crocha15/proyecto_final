@@ -22,7 +22,7 @@ function Login({ isOpen, onClose }) {
             ></div>
 
             {/* Modal */}
-            <div className="fixed inset-0 flex items-center justify-center z-[999] px-4">
+            <div className="fixed inset-0 flex items-center justify-center z-999 px-4">
                 <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-10">
 
                     {/* Botón cerrar */}

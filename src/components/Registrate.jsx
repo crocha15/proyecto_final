@@ -23,7 +23,7 @@ function Registrate({ isOpen, onClose }) {
             ></div>
 
             {/* Modal */}
-            <div className="fixed inset-0 flex items-center justify-center z-[999] px-4">
+            <div className="fixed inset-0 flex items-center justify-center z-999 px-4">
                 <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[98vh] overflow-y-scroll p-10">
 
                     {/* Botón cerrar */}
@@ -130,9 +130,9 @@ function Registrate({ isOpen, onClose }) {
 
                     {/* Separador */}
                     <div className="flex items-center my-6">
-                        <div className="flex-grow border-t border-gray-300"></div>
+                        <div className="grow border-t border-gray-300"></div>
                         <span className="mx-3 text-gray-500 text-sm">o</span>
-                        <div className="flex-grow border-t border-gray-300"></div>
+                        <div className="grow border-t border-gray-300"></div>
                     </div>
 
                     {/* Google */}
