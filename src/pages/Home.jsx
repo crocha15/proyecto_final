@@ -22,8 +22,6 @@ function Home() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
-    // --- DENTRO DE HOME ---
-
     useEffect(() => {
         // 1. Obtener sesión inicial
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -33,7 +31,6 @@ function Home() {
 
         // 2. Escuchar cambios (Login/Logout)
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            console.log("Evento de Auth:", _event); // Esto te dirá en consola si detecta el SIGNED_OUT
             setUser(session?.user ?? null);
             if (_event === 'SIGNED_OUT') {
                 setIsMenuOpen(false);
@@ -70,9 +67,13 @@ function Home() {
     return (
         <div className="flex min-h-screen bg-white font-sans text-[#111111]">
             {/* Sidebar fijo */}
-            <aside className="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-5 gap-5 border-r border-gray-100 bg-white z-[60]">
+            <div className="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-5 gap-5 border-r border-gray-100 bg-white z-[60]">
                 <img src={Pint} alt="Logo" className="w-10 h-10 mb-2 cursor-pointer" />
-                <SidebarIcon img={Inicio} />
+
+                <button
+                    onClick={<Home />}>
+                    <SidebarIcon img={Inicio} />
+                </button>
                 <SidebarIcon img={Explorar} />
                 <SidebarIcon img={Tableros} />
                 <SidebarIcon img={Crear} />
@@ -81,7 +82,7 @@ function Home() {
                 <div className="mt-auto mb-2">
                     <SidebarIcon img={Configuracion} />
                 </div>
-            </aside>
+            </div>
 
             {/* Contenido principal */}
             <div className="flex-1 ml-20">
@@ -96,17 +97,26 @@ function Home() {
 
                     {/* Contenedor del Perfil y Menú */}
                     <div className="relative z-[110]">
-                        <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-full transition-all"
-                        >
-                            <div className="w-12 h-12 bg-[#d4ebd4] text-[#2d5a27] flex items-center justify-center rounded-full font-bold">
-                                <img className='rounded-full' src={user.user_metadata.picture} referrerPolicy='no-referrer' />
-                            </div>
-                            <svg className={`w-4 h-4 text-gray-600 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                        <div className='flex'>
+
+                            <button
+                                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-full transition-all"
+                            >
+                                <div className="w-12 h-12 bg-[#d4ebd4] text-[#2d5a27] flex items-center justify-center rounded-full font-bold">
+                                    <img className='rounded-full' src={user.user_metadata.picture} referrerPolicy='no-referrer' />
+                                </div>
+                            </button>
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="flex items-center h-9 mt-4 gap-1 p-2 hover:bg-gray-100 rounded-full transition-all"
+                            >
+
+                                <svg className={`w-4 h-4 text-gray-600 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                        </div>
 
                         {/* Dropdown Menu (Pinterest Style) */}
                         {isMenuOpen && (

@@ -11,10 +11,6 @@ import pinCoffee from "../assets/pin-coffee.jpg";
 import pinSwans from "../assets/pin-swans.jpg";
 import pinCar from "../assets/pin-car.jpg";
 import pinQuote from "../assets/pin-quote.jpg";
-import plato1 from "../assets/plato1.jpg"
-import plato2 from "../assets/plato2.jpg"
-import plato3 from "../assets/plato3.jpg"
-import plato4 from "../assets/plato4.jpg"
 
 const collageImages = [
     [pinFood, pinInterior],
@@ -29,9 +25,20 @@ function Landing() {
 
     return (
         <>
-            <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-            <Registrate isOpen={isRegistrateOpen} onClose={() => setIsRegistrateOpen(false)} />
-            
+            {/* <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+            <Registrate isOpen={isRegistrateOpen} onClose={() => setIsRegistrateOpen(false)} /> */}
+
+            <Registrate
+                isOpen={isRegisterOpen}
+                onClose={() => setIsRegisterOpen(false)}
+                onOpenLogin={() => setIsLoginOpen(true)} // <--- Pasar esta prop
+            />
+
+            <Login
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+            />
+
             <div className="min-h-screen bg-white">
                 <nav className="fixed top-0 left-0 right-0 z-50 bg-white h-20 px-6 flex items-center justify-between shadow-sm">
                     <div className="flex items-center gap-4">
@@ -40,13 +47,13 @@ function Landing() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button 
+                        <button
                             onClick={() => setIsLoginOpen(true)}
                             className="bg-[#E60023] hover:bg-[#ad001a] text-white font-bold px-5 py-3 rounded-full transition-all"
                         >
                             Iniciar sesión
                         </button>
-                        <button 
+                        <button
                             onClick={() => setIsRegistrateOpen(true)}
                             className="bg-[#efefef] hover:bg-[#e2e2e2] text-black font-bold px-5 py-3 rounded-full transition-all"
                         >
@@ -58,7 +65,7 @@ function Landing() {
                 <section className="relative pt-32 text-center bg-white">
                     <h1 className="text-6xl font-bold text-[#211922] mb-4">Descubre tu próxima</h1>
                     <h2 className="text-6xl font-bold text-[#0076d3] mb-12">idea de atuendos de verano</h2>
-                    
+
                     <div className="relative flex justify-center gap-4 h-[450px] overflow-hidden">
                         {collageImages.map((column, colIndex) => (
                             <div key={colIndex} className={`flex flex-col gap-4 w-52 ${colIndex % 2 === 0 ? 'pt-12' : 'pt-0'}`}>
