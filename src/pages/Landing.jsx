@@ -25,10 +25,10 @@ function Landing() {
 
     return (
         <>
-            {/* <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-            <Registrate isOpen={isRegistrateOpen} onClose={() => setIsRegistrateOpen(false)} /> */}
+            <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+            <Registrate isOpen={isRegistrateOpen} onClose={() => setIsRegistrateOpen(false)} />
 
-            <Registrate
+            {/* <Registrate
                 isOpen={isRegisterOpen}
                 onClose={() => setIsRegisterOpen(false)}
                 onOpenLogin={() => setIsLoginOpen(true)} // <--- Pasar esta prop
@@ -37,7 +37,7 @@ function Landing() {
             <Login
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-            />
+            /> */}
 
             <div className="min-h-screen bg-white">
                 <nav className="fixed top-0 left-0 right-0 z-50 bg-white h-20 px-6 flex items-center justify-between shadow-sm">
