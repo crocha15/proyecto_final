@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { supabase } from './supabaseClient';
+import CrearPin from './pages/CrearPin';
 
 // Importaciones de tus componentes
 import Layout from './components/Layout';
@@ -35,6 +36,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home searchTerm={searchTerm} />} />
           <Route path="/perfil" element={<Perfil user={user} />} />
+          <Route path="/crear-pin" element={<CrearPin user={user} />} />
         </Routes>
       </Layout>
     </Router>
