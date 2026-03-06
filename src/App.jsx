@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+// IMPORTANTE: Solo importamos BrowserRouter como 'Router' para evitar confusiones
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// Asegúrate de que el archivo esté en './components/SearchContext' como dice tu ruta
+import { SearchProvider } from './components/SearchContext'; 
 import { supabase } from './supabaseClient';
 import CrearPin from './pages/CrearPin';
 
@@ -11,7 +14,6 @@ import Landing from './pages/Landing';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,15 +33,19 @@ function App() {
   if (!user) return <Landing />;
 
   return (
-    <Router>
-      <Layout user={user} searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-        <Routes>
-          <Route path="/" element={<Home searchTerm={searchTerm} />} />
-          <Route path="/perfil" element={<Perfil user={user} />} />
-          <Route path="/crear-pin" element={<CrearPin user={user} />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <SearchProvider>
+      {/* 1. Usamos solo el componente 'Router' (que es BrowserRouter) */}
+      <Router>
+        {/* 2. El Layout envuelve las rutas */}
+        <Layout user={user}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/perfil" element={<Perfil user={user} />} />
+            <Route path="/crear-pin" element={<CrearPin user={user} />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </SearchProvider>
   );
 }
 
