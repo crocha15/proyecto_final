@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
-    
+
     // USAMOS EL CONTEXTO GLOBAL EN LUGAR DEL STATE LOCAL
     const { searchTerm, setSearchTerm } = useSearch();
 
@@ -97,7 +97,16 @@ const Layout = ({ children }) => {
                             icon={<img src={Pin_icon} className="w-10 h-10" />}
                             onClick={() => { navigate('/crear-pin'); setIsCreateMenuOpen(false); }}
                         />
-                        {/* Puedes añadir aquí el Collage o Tablero si tienes los iconos listos */}
+                        <CreateMenuItem
+                            title="Tablero"
+                            description="Crea un tablero para organizar una colección de tus Pines favoritos"
+                            icon={<img src={Tablero_icon} alt="Tablero" className="w-6 h-6" />}
+                        />
+                        <CreateMenuItem
+                            title="Collage"
+                            description="Combina ideas para construir tu visión y crear algo nuevo"
+                            icon={<img src={Collage_icon} alt="Collage" className="w-6 h-6" />}
+                        />
                     </div>
                 </div>
             )}
