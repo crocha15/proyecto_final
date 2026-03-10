@@ -12,7 +12,7 @@ function Home() {
     // useRef para guardar el AbortController y poder cancelar peticiones HTTP si el usuario sigue escribiendo
     const abortControllerRef = useRef(null); 
     
-    const PEXELS_API_KEY = 'TU_API_KEY_AQUI';
+    const VITE_PEXELS_API_KEY = 'yy2PQedRMHSRh3cgF4w0OAJTp7pJzZA54rERI3vPHL8SB84k1ziSJi1O';
 
     // --- FUNCIÓN DE CARGA DE DATOS (PEXELS) ---
     const fetchPexelsPhotos = async (pageNumber, isNewSearch, currentQuery) => {
@@ -31,7 +31,7 @@ function Home() {
         try {
             const url = `https://api.pexels.com/v1/search?query=${query}&per_page=30&page=${pageNumber}`;
             const response = await fetch(url, {
-                headers: { Authorization: PEXELS_API_KEY },
+                headers: { Authorization: VITE_PEXELS_API_KEY },
                 signal: controller.signal // Conectamos la señal de aborto a la petición fetch
             });
             const data = await response.json();

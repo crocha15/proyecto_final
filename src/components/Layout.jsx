@@ -151,6 +151,22 @@ const Layout = ({ children }) => {
                                         <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                                     </div>
                                 </div>
+                                <div className="my-3 border-t border-gray-100"></div>
+
+                                <p className="text-xs text-gray-500 mb-1 px-2">Tus cuentas</p>
+                                <button className="w-full text-left p-2 hover:bg-gray-100 rounded-lg font-semibold transition-colors">
+                                    Agregar cuenta
+                                </button>
+                                <button className="w-full text-left p-2 hover:bg-gray-100 rounded-lg font-semibold transition-colors">
+                                    Convertir en cuenta para empresa
+                                </button>
+
+                                <div className="my-3 border-t border-gray-100"></div>
+
+                                <p className="text-xs text-gray-500 mb-1 px-2">Más opciones</p>
+                                <button className="w-full text-left p-2 hover:bg-gray-100 rounded-lg font-semibold transition-colors">
+                                    Configuración
+                                </button>
                                 <div className="border-t border-gray-100 mb-3"></div>
                                 <LogOut />
                             </div>
