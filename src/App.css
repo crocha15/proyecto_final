@@ -1,1 +1,38 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@layer components {
+
+    /* Contenedor principal para simular la pantalla del celular */
+    .mobile-container {
+        @apply min-h-screen bg-white pb-20 md:pb-0;
+    }
+
+    /* Grid de 2 columnas para móvil y Masonry para desktop */
+    .pin-grid {
+        @apply grid grid-cols-2 gap-3 p-3 md:columns-4 lg:columns-6 md:block md:space-y-4;
+    }
+
+    /* Estilo de la imagen del Pin */
+    .pin-card {
+        @apply relative break-inside-avoid mb-4 rounded-2xl overflow-hidden shadow-sm transition-transform active:scale-95;
+    }
+
+    /* Barra de navegación inferior (Solo móvil) */
+    .mobile-nav {
+        @apply fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-100 flex items-center justify-around z-50 md:hidden;
+    }
+
+    /* Estilo de los botones de la nav inferior */
+    .nav-item {
+        @apply flex flex-col items-center justify-center text-gray-400 transition-colors;
+    }
+
+    .nav-item.active {
+        @apply text-black;
+    }
+}
+
+/* Ajuste para que las imágenes mantengan su proporción */
+.pin-grid img {
+    @apply w-full h-auto object-cover rounded-2xl;
+}

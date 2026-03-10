@@ -9,19 +9,20 @@ function Login({ isOpen, onClose }) {
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
+    // 2. Función de manejo de envío del formulario, que se encarga de autenticar al usuario con Supabase utilizando el correo electrónico y la contraseña proporcionados, y maneja los estados de carga y error para proporcionar feedback al usuario durante el proceso de inicio de sesión
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         
         try {
-            // 2. CORRECCIÓN CRÍTICA: Supabase exige la palabra 'email'
+            // 3. CORRECCIÓN CRÍTICA: Supabase exige la palabra 'email'
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: correo, // Enviamos el estado 'correo' a la propiedad 'email'
                 password: password,
             });
 
             if (error) {
-                // 3. Manejo de error de credenciales (el 400 que veías en consola)
+                // 4. Manejo de error de credenciales (el 400 que veías en consola)
                 alert("Error de acceso: " + error.message);
             } else {
                 console.log("¡Login exitoso!", data);
@@ -33,7 +34,7 @@ function Login({ isOpen, onClose }) {
             setLoading(false);
         }
     };
-
+    // 5. Función para iniciar sesión con Google, que utiliza la autenticación OAuth de Supabase para redirigir al usuario a la página de inicio de sesión de Google y manejar la redirección después de la autenticación, lo que permite a los usuarios iniciar sesión fácilmente con su cuenta de Google sin necesidad de crear una cuenta separada en la aplicación
     const handleGoogleLogin = async () => {
         await supabase.auth.signInWithOAuth({
             provider: 'google',
@@ -41,7 +42,7 @@ function Login({ isOpen, onClose }) {
         });
     };
 
-    if (!isOpen) return null
+    if (!isOpen) return null// Si el modal no está abierto, no renderizamos nada
 
     return (
         <>
@@ -51,13 +52,14 @@ function Login({ isOpen, onClose }) {
                     <button onClick={onClose} className="absolute top-5 right-5 text-gray-400 text-2xl hover:text-gray-600">✕</button>
 
                     <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Te damos la bienvenida a Pinterest</h2>
-
+                    
+                    {/* // 6. El formulario de inicio de sesión incluye campos para el correo electrónico y la contraseña, con un botón para mostrar u ocultar la contraseña, y un botón de envío que se desactiva durante la carga para evitar múltiples envíos, proporcionando una experiencia de usuario fluida y segura al iniciar sesión en la aplicación */}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <input
                             type="email"
                             placeholder="Correo electrónico"
                             className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none"
-                            value={correo} // Debe coincidir con el nombre del useState
+                            value={correo}
                             onChange={(e) => setCorreo(e.target.value)}
                             required
                         />
@@ -77,19 +79,21 @@ function Login({ isOpen, onClose }) {
                         
                         <button 
                             type="submit" 
-                            disabled={loading}
+                            disabled={loading}// El botón se desactiva mientras se está procesando el inicio de sesión para evitar múltiples envíos
                             className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-full transition disabled:bg-gray-400"
                         >
                             {loading ? "Cargando..." : "Iniciar sesión"}
                         </button>
                     </form>
 
+                    {/* 7. Separador visual con la palabra "O" para indicar opciones de inicio de sesión alternativas, mejorando la claridad y la experiencia del usuario al ofrecer múltiples métodos de autenticación en la interfaz de inicio de sesión */ }
                     <div className="relative my-6 flex items-center">
                         <div className="flex-grow border-t border-gray-200"></div>
                         <span className="px-3 text-gray-400 text-xs font-bold uppercase">O</span>
                         <div className="flex-grow border-t border-gray-200"></div>
                     </div>
 
+                    {/* 8. Botón para iniciar sesión con Google, que incluye el logo de Google*/ }
                     <button
                         onClick={handleGoogleLogin}
                         className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-full font-bold transition text-gray-700"

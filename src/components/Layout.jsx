@@ -4,6 +4,7 @@ import LogOut from '../components/LogOut';
 import { supabase } from '../supabaseClient';
 import Landing from '../pages/Landing';
 import { useSearch } from '../components/SearchContext';
+import MovileNav from '../components/MobileLayout';
 
 // Assets
 import Pint from '../assets/pint.png';
@@ -18,31 +19,37 @@ import Pin_icon from '../assets/pin_icon.png';
 import Collage_icon from '../assets/collage_icon.png';
 import Tablero_icon from '../assets/tablero_icon.png';
 
+// Layout principal que envuelve toda la aplicación 
 const Layout = ({ children }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Estado para almacenar la información del usuario autenticado, el estado de carga y el estado de los menús desplegables
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
+    const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false); // USAMOS EL CONTEXTO GLOBAL EN LUGAR DEL STATE LOCAL
+    const { searchTerm, setSearchTerm } = useSearch(); /* Verificamos la sesión del usuario al cargar el componente 
+    y nos suscribimos a los cambios de autenticación para mantener el estado del usuario actualizado en tiempo real*/
 
-    // USAMOS EL CONTEXTO GLOBAL EN LUGAR DEL STATE LOCAL
-    const { searchTerm, setSearchTerm } = useSearch();
-
+    // Efecto para manejar la autenticación del usuario y actualizar el estado en consecuencia
     React.useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        // Verificamos si hay una sesión activa al cargar el componente
+        supabase.auth.getSession().then(({ data: { session } }) => { // Si hay una sesión activa, actualizamos el estado del usuario, de lo contrario lo dejamos como null
             setUser(session?.user ?? null);
             setLoading(false);
         });
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        /*Nos suscribimos a los cambios de autenticación para actualizar el estado del usuario en tiempo real 
+        cuando el usuario inicie o cierre sesión*/
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => { // Actualizamos el estado del usuario cada vez que cambia la autenticación, asegurando que la interfaz refleje el estado actual del usuario sin necesidad de recargar la página
             setUser(session?.user ?? null);
         });
-
+        // Limpiamos la suscripción cuando el componente se desmonta para evitar fugas de memoria
         return () => subscription.unsubscribe();
     }, []);
 
+    // Función para alternar el menú de creación y cerrar el menú de creación al navegar a la página de creación de pines
     const toggleCreateMenu = () => setIsCreateMenuOpen(!isCreateMenuOpen);
 
+    // Componente para los íconos del sidebar, que cambia su apariencia cuando está activo o al pasar el cursor sobre él
     const SidebarIcon = ({ img, active = false, onClick }) => (
         <div
             onClick={onClick}
@@ -52,6 +59,7 @@ const Layout = ({ children }) => {
         </div>
     );
 
+    // Componente para los elementos del menú de creación, que muestra un título, una descripción y un ícono, y ejecuta una función al hacer clic en él
     const CreateMenuItem = ({ title, description, icon, onClick }) => (
         <div onClick={onClick} className="flex gap-4 p-4 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
             <div className="w-24 h-12 rounded-lg flex items-center justify-center text-2xl">{icon}</div>
@@ -62,13 +70,13 @@ const Layout = ({ children }) => {
         </div>
     );
 
-    if (loading) return null;
-    if (!user) return <Landing />;
+    if (loading) return <p>Cargando...</p>; // Si no hay un usuario autenticado, mostramos la página de inicio de sesión/registro (Landing)
+    if (!user) return <Landing />; // Si hay un usuario autenticado, mostramos el layout principal con la barra lateral, la barra superior y el contenido principal (children) que se renderiza según la ruta actual
 
     return (
         <div className="flex min-h-screen bg-white font-sans text-[#111111]">
-            {/* --- SIDEBAR IZQUIERDO --- */}
-            <div className="fixed left-0 top-0 h-full w-20 flex flex-col items-center py-5 gap-5 border-r border-gray-100 bg-white z-[60]">
+            {/* --- SIDEBAR IZQUIERDO (Oculto en móvil, visible en escritorio) --- */}
+            <div className="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center py-5 gap-5 border-r border-gray-100 bg-white z-[60]">
                 <img src={Pint} alt="Logo" className="w-12 h-10 mb-2 cursor-pointer" onClick={() => navigate('/')} />
                 <SidebarIcon img={Inicio} onClick={() => navigate('/')} />
                 <SidebarIcon img={Explorar} />
@@ -83,7 +91,7 @@ const Layout = ({ children }) => {
 
             {/* --- MENÚ CREAR --- */}
             {isCreateMenuOpen && (
-                <div className="fixed left-20 top-0 bottom-0 w-80 bg-white border-r border-gray-100 p-6 z-50 overflow-y-auto">
+                <div className="fixed left-0 md:left-20 top-0 bottom-0 w-full md:w-80 bg-white border-r border-gray-100 p-6 z-[70] overflow-y-auto">
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-xl font-semibold">Crear</h2>
                         <button onClick={toggleCreateMenu} className="p-2 hover:bg-gray-100 rounded-full text-gray-500">
@@ -111,25 +119,27 @@ const Layout = ({ children }) => {
                 </div>
             )}
 
-            <div className="flex-1 ml-20 flex flex-col">
+            {/* --- CONTENIDO PRINCIPAL (Margen solo en escritorio) --- */}
+            <div className="flex-1 ml-0 md:ml-20 flex flex-col pb-20 md:pb-0">
                 {/* --- BARRA SUPERIOR --- */}
-                <header className="sticky top-0 z-50 bg-white px-8 h-20 flex items-center gap-4">
+                <header className="sticky top-0 z-50 bg-white px-4 md:px-8 h-20 flex items-center gap-4">
                     <div className="flex-1 relative">
+                        {/* El campo de búsqueda se conecta al contexto global para actualizar el término de búsqueda en toda la aplicación, lo que permite que los resultados se actualicen en tiempo real a medida que el usuario escribe */}
                         <input
                             type="text"
-                            placeholder="Buscar en Pexels..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Buscar Pin..."
+                            value={searchTerm}// El valor del campo de búsqueda se obtiene del contexto global, lo que permite que cualquier componente que consuma este contexto tenga acceso al término de búsqueda actualizado
+                            onChange={(e) => setSearchTerm(e.target.value)}// Al cambiar el valor del campo de búsqueda, se actualiza el estado global searchTerm a través de setSearchTerm, lo que hace que cualquier componente que dependa de este valor se vuelva a renderizar con los resultados de búsqueda actualizados
                             className="w-full bg-[#efefef] hover:bg-[#e1e1e1] rounded-full py-3 px-12 outline-none transition-colors"
                         />
                         <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </div>
-
+                    {/* El menú de usuario muestra el avatar del usuario autenticado y un menú desplegable con opciones para ver el perfil y cerrar sesión, lo que permite al usuario acceder fácilmente a su información y gestionar su cuenta desde cualquier página de la aplicación */}
                     <div className="relative z-[110] flex items-center gap-2">
                         <button onClick={() => navigate('/perfil')} className="w-12 h-12 rounded-full overflow-hidden border-2 border-transparent hover:border-gray-200 transition-all">
                             <img className="w-full h-full object-cover" src={user?.user_metadata?.picture} referrerPolicy="no-referrer" alt="profile" />
                         </button>
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 hover:bg-gray-100 rounded-full transition-all">
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-all">
                             <svg className={`w-4 h-4 text-gray-600 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                         </button>
                         {isMenuOpen && (
@@ -149,7 +159,7 @@ const Layout = ({ children }) => {
                 </header>
 
                 {/* --- CONTENIDO PRINCIPAL --- */}
-                <main className="flex-1">
+                <main className="flex-1 p-2 md:p-0">
                     {/* Pasamos el searchTerm global a los hijos */}
                     {React.Children.map(children, child => {
                         if (React.isValidElement(child)) {
@@ -158,6 +168,11 @@ const Layout = ({ children }) => {
                         return child;
                     })}
                 </main>
+            </div>
+
+            {/* --- NAVEGACIÓN MÓVIL (Solo visible en pantallas pequeñas) --- */}
+            <div className="md:hidden">
+                <MovileNav />
             </div>
         </div>
     );

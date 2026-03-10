@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { supabase } from '../supabaseClient'; // Asegúrate de que la ruta sea correcta
+import { supabase } from '../supabaseClient'; 
 
 function Pin({ pin }) {
-    const [isSaving, setIsSaving] = useState(false);
-    const [isSaved, setIsSaved] = useState(pin.saved || false);
+    const [isSaving, setIsSaving] = useState(false);// Estado para controlar si se está guardando el pin, lo que permite mostrar un indicador de carga y evitar múltiples clics mientras se procesa la acción de guardado
+    const [isSaved, setIsSaved] = useState(pin.saved || false);// Estado para controlar si el pin ya está guardado, lo que permite cambiar el estilo del botón y evitar guardar el mismo pin varias veces, mejorando la experiencia del usuario al proporcionar feedback visual sobre el estado de guardado del pin
 
     const handleSave = async (e) => {
-        e.stopPropagation(); // Evita que el clic dispare otros eventos del contenedor
+        e.stopPropagation(); // Evita que el clic dispare otros eventos del contenedor 
 
         if (isSaved) return; // Si ya está guardado, no hace nada
 
@@ -33,7 +33,7 @@ function Pin({ pin }) {
                     }
                 ]);
 
-            if (error) throw error;
+            if (error) throw error;// Manejo de error en la inserción
 
             // 3. Actualizar estado visual
             setIsSaved(true);
@@ -47,6 +47,7 @@ function Pin({ pin }) {
     };
 
     return (
+        // El componente Pin muestra una imagen con un overlay que aparece al hacer hover, permitiendo al usuario guardar el pin en su cuenta de Supabase. El botón de guardado cambia su estado y estilo según si el pin ya está guardado o si se está procesando la acción, proporcionando una experiencia de usuario interactiva y visualmente atractiva.
         <div className="break-inside-avoid mb-4 group relative cursor-pointer transition-transform duration-500 hover:scale-[1.02]">
             <div className="relative overflow-hidden rounded-3xl bg-gray-200 shadow-md">
                 <img
@@ -67,6 +68,7 @@ function Pin({ pin }) {
                                     : 'bg-[#E60023] text-white hover:bg-[#ad001a] hover:shadow-xl'
                                 }`}
                         >
+                            
                             {isSaving ? '...' : isSaved ? 'Guardado' : 'Guardar'}
                         </button>
                     </div>

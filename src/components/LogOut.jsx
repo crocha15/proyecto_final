@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient'
 
 export default function LogOut() {
 
+    // Función para cerrar sesión, que utiliza el método signOut de Supabase para finalizar la sesión del usuario actual, lo que permite a los usuarios salir de su cuenta de manera segura y volver a la pantalla de inicio de sesión o a la página principal sin acceso a funciones protegidas
     const handleLogOut = async () => {
         await supabase.auth.signOut()
     }

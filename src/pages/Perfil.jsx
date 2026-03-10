@@ -3,28 +3,32 @@ import { supabase } from '../supabaseClient';
 import Pin from '../components/Pin';
 
 function Perfil({ user }) {
-    const [misPines, setMisPines] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // --- ESTADOS ---
+    const [misPines, setMisPines] = useState([]); // Almacena los pines recuperados de la base de datos
+    const [loading, setLoading] = useState(true); // Controla el estado visual de carga
 
-    // 1. Cargar los pines desde Supabase
+    // --- BLOQUE 1: Recuperar datos de Supabase ---
     const fetchMisPines = async () => {
         setLoading(true);
         try {
+            // Consulta a la tabla 'pines' filtrando por el ID del usuario actual
             const { data, error } = await supabase
                 .from('pines')
                 .select('*')
-                .eq('user_id', user.id) // Solo los del usuario actual
-                .order('created_at', { ascending: false });
+                .eq('user_id', user.id) // Seguridad: solo trae lo que me pertenece
+                .order('created_at', { ascending: false }); // Mostrar los más recientes primero
 
             if (error) throw error;
 
-            // Formateamos los datos para que el componente <Pin /> los entienda
+            // ADAPTACIÓN DE DATOS:
+            // Transformamos los nombres de las columnas de la DB (image_url) 
+            // a los nombres que espera el componente <Pin /> (image).
             const pinesAdaptados = data.map(p => ({
-                id: p.id, // ID de la fila en Supabase para poder borrarlo
+                id: p.id,
                 pexels_id: p.pexels_id,
                 image: p.image_url,
                 title: p.title,
-                saved: true // En el perfil, todos están guardados
+                saved: true // Marcamos como guardados por defecto al estar en el perfil
             }));
 
             setMisPines(pinesAdaptados);
@@ -35,34 +39,40 @@ function Perfil({ user }) {
         }
     };
 
+    // Efecto que dispara la carga inicial cuando el componente se monta o el usuario cambia
     useEffect(() => {
         if (user) fetchMisPines();
     }, [user]);
 
-    // 2. Función para eliminar un pin
+    // --- BLOQUE 2: Eliminar un Pin ---
     const deletePin = async (id) => {
+        // Petición de borrado a Supabase filtrando por el ID único de la fila
         const { error } = await supabase
             .from('pines')
             .delete()
             .eq('id', id);
 
         if (!error) {
-            // Actualizamos la lista localmente para que desaparezca al instante
+            // OPTIMISTIC UI: Filtramos el estado local para que el Pin desaparezca 
+            // de la pantalla inmediatamente sin tener que recargar la página.
             setMisPines(misPines.filter(pin => pin.id !== id));
         } else {
             alert("No se pudo eliminar el pin");
         }
     };
 
+    // Protección: Si no hay usuario (ej. sesión expirada), mostramos mensaje de aviso
     if (!user) return <div className="p-10 text-center">Inicia sesión para ver tu perfil</div>;
 
     return (
         <div className="flex-1 min-h-screen bg-white">
             <main className="p-8">
-                {/* Cabecera del Perfil */}
+
+                {/* CABECERA: Información del usuario extraída de los Metadatos de Supabase */}
                 <div className="flex flex-col items-center mb-10">
                     <div className="w-32 h-32 rounded-full overflow-hidden mb-4 border-2 border-gray-100 shadow-sm">
                         <img
+                            // Intenta sacar la foto de Google/OAuth, si no, genera un avatar con las iniciales
                             src={user.user_metadata?.avatar_url || user.user_metadata?.picture || `https://ui-avatars.com/api/?name=${user.email}`}
                             alt="avatar"
                             className="w-full h-full object-cover"
@@ -84,24 +94,30 @@ function Perfil({ user }) {
                     </div>
                 </div>
 
-                {/* Tabs de navegación */}
+                {/* TABS: Navegación interna del perfil */}
                 <div className="flex justify-center gap-8 mb-8 border-b border-gray-100">
                     <button className="font-bold border-b-2 border-black pb-4 px-2">Creados</button>
                     <button className="font-bold border-b-2 border-black pb-4 px-2">Guardados</button>
                 </div>
 
-                {/* Grid de Pines Guardados */}
+                {/* GRID DE RESULTADOS */}
                 <div className="max-w-7xl mx-auto">
                     {loading ? (
+                        // Spinner de carga mientras fetchMisPines trabaja
                         <div className="flex justify-center py-20">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
                         </div>
                     ) : misPines.length > 0 ? (
+                        // Galería de pines estilo Pinterest
                         <div className="columns-2 md:columns-3 lg:columns-5 gap-4 space-y-4">
                             {misPines.map((pin) => (
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
-                                    {/* Botón extra para eliminar (Solo visible en Perfil) */}
+
+                                    {/* BOTÓN ELIMINAR: 
+                                        Aparece solo al pasar el mouse (group-hover) 
+                                        y permite borrar el pin de la DB
+                                    */}
                                     <button
                                         onClick={() => deletePin(pin.id)}
                                         className="absolute bottom-14 right-4 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200"
@@ -115,6 +131,7 @@ function Perfil({ user }) {
                             ))}
                         </div>
                     ) : (
+                        // Estado vacío: si el usuario no tiene nada guardado
                         <div className="text-center py-20">
                             <p className="text-xl text-gray-500 mb-4">Aún no has guardado ninguna idea.</p>
                             <a href="/" className="bg-red-600 text-white font-bold py-3 px-6 rounded-full hover:bg-red-700 transition-colors">
