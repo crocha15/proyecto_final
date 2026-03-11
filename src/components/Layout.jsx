@@ -21,6 +21,7 @@ import Tablero_icon from '../assets/tablero_icon.png';
 
 // Layout principal que envuelve toda la aplicación 
 const Layout = ({ children }) => {
+
     const navigate = useNavigate(); // Estado para almacenar la información del usuario autenticado, el estado de carga y el estado de los menús desplegables
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
