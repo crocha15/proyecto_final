@@ -3,7 +3,7 @@ import { supabase } from "../supabaseClient";
 import Google from "../assets/google.png";
 
 function Registrate({ isOpen, onClose, onOpenLogin }) {
-    // --- ESTADOS DEL COMPONENTE ---
+
     // Guardan la información que el usuario escribe en los inputs
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -44,9 +44,8 @@ function Registrate({ isOpen, onClose, onOpenLogin }) {
 
                 if (tableError) throw tableError;
             }
-
             // BLOQUE 3: Finalización exitosa
-            alert("¡Registro exitoso! Ya puedes iniciar sesión.");
+            alert("¡Registro exitoso!");
             onClose();       // Cierra este modal de Registro
             onOpenLogin();   // Llama a la función para abrir el modal de Login automáticamente
 

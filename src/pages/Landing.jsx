@@ -3,7 +3,7 @@ import Login from '../components/Login'
 import Registrate from '../components/Registrate'
 
 // IMPORTACIÓN DE ASSETS
-import logoPinterest from '../assets/logo-pinterest.png'
+import logoPinterest from '../assets/logo-pinterest.png';
 import pinFood from "../assets/pin-food.jpg";
 import pinInterior from "../assets/pin-interior.jpg";
 import pinCrafts from "../assets/pin-crafts.jpg";
@@ -37,15 +37,13 @@ function Landing() {
             <Registrate isOpen={isRegistrateOpen} onClose={() => setIsRegistrateOpen(false)} />
 
             <div className="min-h-screen bg-white">
-
-                {/* NAVEGACIÓN (BARRA SUPERIOR) 
-                    fixed: siempre visible al hacer scroll.
-                    z-50: asegura que esté por encima de las imágenes del collage.
-                */}
+                {/* NAVEGACIÓN SUPERIOR */}
                 <nav className="fixed top-0 left-0 right-0 z-50 bg-white h-20 px-6 flex items-center justify-between shadow-sm">
                     <div className="flex items-center gap-4">
                         <img src={logoPinterest} alt="Pinterest" className="h-8 w-auto cursor-pointer" />
-                        <button className="text-black font-bold px-4 py-2 hover:bg-gray-100 rounded-full">Explorar</button>
+                        <button className="text-black font-bold px-4 py-2 hover:bg-gray-100 rounded-full">
+                            Explorar
+                        </button>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -70,9 +68,7 @@ function Landing() {
                     <h1 className="text-6xl font-bold text-[#211922] mb-4">Descubre tu próxima</h1>
                     <h2 className="text-6xl font-bold text-[#0076d3] mb-12">idea de atuendos de verano</h2>
 
-                    {/* COLLAGE DE IMÁGENES 
-                        Utiliza un sistema de columnas para imitar el estilo de Pinterest.
-                    */}
+                    {/* COLLAGE DE IMÁGENES */}
                     <div className="relative flex justify-center gap-4 h-[450px] overflow-hidden">
                         {collageImages.map((column, colIndex) => (
                             <div
@@ -91,9 +87,7 @@ function Landing() {
                             </div>
                         ))}
 
-                        {/* DEGRADADO INFERIOR 
-                            Aplica una sombra blanca difuminada al final del collage para que se mezcle con el fondo
-                        */}
+                        {/* DEGRADADO INFERIOR */}
                         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent z-10"></div>
                     </div>
                 </section>

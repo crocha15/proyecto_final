@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// IMPORTANTE: Solo importamos BrowserRouter como 'Router' para evitar confusiones
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// Asegúrate de que el archivo esté en './components/SearchContext' como dice tu ruta
 import { SearchProvider } from './components/SearchContext'; 
 import { supabase } from './supabaseClient';
 import CrearPin from './pages/CrearPin';
 
-// Importaciones de tus componentes
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Perfil from './pages/Perfil';
@@ -16,16 +13,17 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Verificar sesión al cargar la aplicación y configurar el listener de autenticación
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
     });
-
+    // Configura un listener para cambios en el estado de autenticación (login/logout)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
+    // Limpia el listener cuando el componente se desmonte para evitar fugas de memoria
     return () => subscription.unsubscribe();
   }, []);
 

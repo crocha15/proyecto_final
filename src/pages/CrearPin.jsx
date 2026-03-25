@@ -22,35 +22,32 @@ const CrearPin = ({ user }) => {
     // Procesa el archivo seleccionado (vía input o vía drag & drop)
     const processFile = (file) => {
         if (file) {
-            const reader = new FileReader();
-            // Cuando el archivo se termina de leer, se guarda en el estado 'image'
-            reader.onload = (ev) => setImage(ev.target?.result);
-            // Lee el archivo y lo convierte en una cadena base64 para previsualización
-            reader.readAsDataURL(file);
+            const reader = new FileReader(); // FileReader para convertir el archivo en una URL de datos (base64) que se puede mostrar como vista previa
+            reader.onload = (ev) => setImage(ev.target?.result); // Cuando la lectura se completa, actualizamos el estado 'image' con la URL de datos resultante, lo que permite mostrar una vista previa de la imagen seleccionada en la interfaz de usuario.
+            reader.readAsDataURL(file); // Iniciamos la lectura del archivo como URL de datos. Esto es necesario para mostrar la imagen en el navegador sin necesidad de subirla primero a un servidor.
         }
     };
 
     // Maneja la selección manual de archivos desde el explorador
     const handleFileChange = (e) => {
-        const file = e.target.files?.[0];
-        processFile(file);
+        const file = e.target.files?.[0]; // Obtenemos el primer archivo seleccionado (si hay alguno)
+        processFile(file); // Procesamos el archivo para generar la vista previa y actualizar el estado 'image'
     };
 
     // Maneja el evento de soltar un archivo sobre el área designada (Drag & Drop)
     const handleDrop = (e) => {
-        e.preventDefault(); // Evita que el navegador abra la imagen por defecto
-        const file = e.dataTransfer.files?.[0];
-        processFile(file);
+        e.preventDefault(); // Evita que el navegador abra la imagen por defecto al soltarla
+        const file = e.dataTransfer.files?.[0]; // Obtenemos el primer archivo soltado (si hay alguno)
+        processFile(file); // Procesamos el archivo para generar la vista previa y actualizar el estado 'image'
     };
 
-    // --- PERSISTENCIA DE DATOS ---
 
     // Función para enviar los datos a la tabla 'pines' de Supabase
     const handleSave = async () => {
         // Validación básica: no permitir guardar sin imagen
         if (!image) return alert("Por favor selecciona una imagen");
-
         setLoading(true); // Bloquea el botón mientras se procesa la petición
+
         try {
             const { error } = await supabase
                 .from('pines') // Nombre de la tabla en Supabase
@@ -59,7 +56,6 @@ const CrearPin = ({ user }) => {
                         user_id: user.id,            // ID del usuario que crea el Pin
                         title: title || "Sin título", // Título opcional
                         image_url: image,             // URL o base64 de la imagen
-                        // Aquí podrías agregar description y link si tu tabla los tiene
                     }
                 ]);
 

@@ -3,11 +3,11 @@ import { supabase } from '../supabaseClient';
 import Pin from '../components/Pin';
 
 function Perfil({ user }) {
-    // --- ESTADOS ---
+
     const [misPines, setMisPines] = useState([]); // Almacena los pines recuperados de la base de datos
     const [loading, setLoading] = useState(true); // Controla el estado visual de carga
 
-    // --- BLOQUE 1: Recuperar datos de Supabase ---
+    // BLOQUE 1: Recuperar datos de Supabase
     const fetchMisPines = async () => {
         setLoading(true);
         try {
@@ -53,8 +53,8 @@ function Perfil({ user }) {
             .eq('id', id);
 
         if (!error) {
-            // OPTIMISTIC UI: Filtramos el estado local para que el Pin desaparezca 
-            // de la pantalla inmediatamente sin tener que recargar la página.
+            /* Filtramos el estado local para que el Pin desaparezca 
+               de la pantalla inmediatamente sin tener que recargar la página. */
             setMisPines(misPines.filter(pin => pin.id !== id));
         } else {
             alert("No se pudo eliminar el pin");
@@ -64,6 +64,7 @@ function Perfil({ user }) {
     // Protección: Si no hay usuario (ej. sesión expirada), mostramos mensaje de aviso
     if (!user) return <div className="p-10 text-center">Inicia sesión para ver tu perfil</div>;
 
+    
     return (
         <div className="flex-1 min-h-screen bg-white">
             <main className="p-8">
@@ -82,6 +83,7 @@ function Perfil({ user }) {
                     <h1 className="text-3xl font-bold text-gray-900">
                         {user.user_metadata?.full_name || 'Usuario'}
                     </h1>
+
                     <p className="text-gray-500 font-medium">@{user.email.split('@')[0]}</p>
 
                     <div className="flex gap-2 mt-6">
@@ -114,10 +116,8 @@ function Perfil({ user }) {
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
 
-                                    {/* BOTÓN ELIMINAR: 
-                                        Aparece solo al pasar el mouse (group-hover) 
-                                        y permite borrar el pin de la DB
-                                    */}
+                                    {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
+                                    <p className='color-black'>{pin.created_at}</p>
                                     <button
                                         onClick={() => deletePin(pin.id)}
                                         className="absolute bottom-14 right-4 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200"

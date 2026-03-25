@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { supabase } from '../supabaseClient'; 
 
 function Pin({ pin }) {
-    const [isSaving, setIsSaving] = useState(false);// Estado para controlar si se está guardando el pin, lo que permite mostrar un indicador de carga y evitar múltiples clics mientras se procesa la acción de guardado
+    const [isSaving, setIsSaving] = useState(false); // Estado para controlar si se está guardando el pin, lo que permite mostrar un indicador de carga y evitar múltiples clics mientras se procesa la acción de guardado
     const [isSaved, setIsSaved] = useState(pin.saved || false);// Estado para controlar si el pin ya está guardado, lo que permite cambiar el estilo del botón y evitar guardar el mismo pin varias veces, mejorando la experiencia del usuario al proporcionar feedback visual sobre el estado de guardado del pin
 
     const handleSave = async (e) => {
         e.stopPropagation(); // Evita que el clic dispare otros eventos del contenedor 
 
         if (isSaved) return; // Si ya está guardado, no hace nada
-
         setIsSaving(true);
 
         try {
@@ -18,7 +17,7 @@ function Pin({ pin }) {
 
             if (!user) {
                 alert("Debes iniciar sesión para guardar pines");
-                return;
+                return; // Si no hay usuario, no continúa con el guardado
             }
 
             // 2. Insertar en la tabla 'pines' de Supabase
@@ -40,7 +39,7 @@ function Pin({ pin }) {
 
         } catch (error) {
             console.error('Error al guardar:', error.message);
-            alert('Error al guardar el pin');
+            alert('Error al guardar el pin: ' + error.message);
         } finally {
             setIsSaving(false);
         }
@@ -63,12 +62,12 @@ function Pin({ pin }) {
                         <button
                             onClick={handleSave}
                             disabled={isSaving || isSaved}
-                            className={`px-6 py-3 rounded-full font-bold text-base shadow-lg active:scale-90 transition-all ${isSaved
+                            className={`px-6 py-3 rounded-full font-bold text-base shadow-lg active:scale-90 transition-all 
+                                ${isSaved
                                     ? 'bg-black text-white cursor-default'
                                     : 'bg-[#E60023] text-white hover:bg-[#ad001a] hover:shadow-xl'
                                 }`}
                         >
-                            
                             {isSaving ? '...' : isSaved ? 'Guardado' : 'Guardar'}
                         </button>
                     </div>

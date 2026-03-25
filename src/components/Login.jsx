@@ -3,7 +3,7 @@ import { supabase } from '../supabaseClient'
 import Google from "../assets/google.png";
 
 function Login({ isOpen, onClose }) {
-    // 1. Aseguramos que el estado se llame 'correo' para que coincida con el input
+ 
     const [correo, setCorreo] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
@@ -15,14 +15,14 @@ function Login({ isOpen, onClose }) {
         setLoading(true);
         
         try {
-            // 3. CORRECCIÓN CRÍTICA: Supabase exige la palabra 'email'
+            // 3. Autenticación con Supabase utilizando el método signInWithPassword, que verifica las credenciales del usuario y devuelve los datos de autenticación o un error en caso de credenciales incorrectas, lo que permite a los usuarios iniciar sesión de manera segura en la aplicación
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: correo, // Enviamos el estado 'correo' a la propiedad 'email'
                 password: password,
             });
 
             if (error) {
-                // 4. Manejo de error de credenciales (el 400 que veías en consola)
+                // 4. Manejo de error de credenciales
                 alert("Error de acceso: " + error.message);
             } else {
                 console.log("¡Login exitoso!", data);
@@ -53,7 +53,7 @@ function Login({ isOpen, onClose }) {
 
                     <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Te damos la bienvenida a Pinterest</h2>
                     
-                    {/* // 6. El formulario de inicio de sesión incluye campos para el correo electrónico y la contraseña, con un botón para mostrar u ocultar la contraseña, y un botón de envío que se desactiva durante la carga para evitar múltiples envíos, proporcionando una experiencia de usuario fluida y segura al iniciar sesión en la aplicación */}
+                    {/* // 6. El formulario de inicio de sesión incluye campos para el correo electrónico y la contraseña */}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <input
                             type="email"

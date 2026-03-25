@@ -3,15 +3,13 @@ import Pin from '../components/Pin';
 import { useSearch } from '../components/SearchContext'; // Hook para acceder al término de búsqueda global
 
 function Home() {
-    // --- ESTADOS Y REFERENCIAS ---
+
     const { searchTerm } = useSearch();        // Obtiene lo que el usuario escribe en la barra de búsqueda (Contexto)
     const [pins, setPins] = useState([]);      // Almacena la lista de fotos/pines a mostrar
     const [page, setPage] = useState(1);       // Controla el número de página actual para la API
     const [loading, setLoading] = useState(false); // Estado para mostrar el spinner de carga
-    
-    // useRef para guardar el AbortController y poder cancelar peticiones HTTP si el usuario sigue escribiendo
-    const abortControllerRef = useRef(null); 
-    
+    const abortControllerRef = useRef(null);   // useRef para guardar el AbortController y poder cancelar peticiones HTTP si el usuario sigue escribiendo
+
     const VITE_PEXELS_API_KEY = 'yy2PQedRMHSRh3cgF4w0OAJTp7pJzZA54rERI3vPHL8SB84k1ziSJi1O';
 
     // --- FUNCIÓN DE CARGA DE DATOS (PEXELS) ---
@@ -20,7 +18,7 @@ function Home() {
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
         }
-        
+        // Creamos un nuevo AbortController para esta nueva petición y lo guardamos en el ref
         const controller = new AbortController();
         abortControllerRef.current = controller;
 
@@ -34,7 +32,7 @@ function Home() {
                 headers: { Authorization: VITE_PEXELS_API_KEY },
                 signal: controller.signal // Conectamos la señal de aborto a la petición fetch
             });
-            const data = await response.json();
+            const data = await response.json(); // Parseamos la respuesta JSON de Pexels que contiene la lista de fotos
 
             if (data.photos) {
                 // Formateamos los datos recibidos de Pexels para que coincidan con lo que espera el componente <Pin />
@@ -66,8 +64,8 @@ function Home() {
     // --- EFECTO 1: Búsqueda reactiva con Debounce ---
     // Este efecto se dispara cada vez que cambia 'searchTerm'
     useEffect(() => {
-        // Debounce: Esperamos 300ms después de que el usuario deje de escribir para disparar la API.
-        // Esto ahorra muchísimas peticiones innecesarias.
+        /* Debounce: Esperamos 300ms después de que el usuario deje de escribir para disparar la API.
+        Esto ahorra muchísimas peticiones innecesarias. */ 
         const delayDebounceFn = setTimeout(() => {
             setPage(1); // Reiniciamos a la página 1 para una nueva búsqueda
             fetchPexelsPhotos(1, true, searchTerm);
@@ -84,7 +82,7 @@ function Home() {
     // Se dispara cuando 'page' aumenta
     useEffect(() => {
         if (page > 1) {
-            fetchPexelsPhotos(page, false, searchTerm);
+            fetchPexelsPhotos(page, false, searchTerm); // Carga más fotos sin borrar las anteriores (isNewSearch = false) usando el mismo término de búsqueda actual
         }
     }, [page]);
 
@@ -95,11 +93,11 @@ function Home() {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
                 // Si no estamos cargando ya, aumentamos el número de página para disparar el Efecto 2
                 if (!loading) {
-                    setPage(prev => prev + 1);
+                    setPage(prev => prev + 1); // Incrementamos la página para cargar más fotos. El Efecto 2 se encargará de llamar a la API con el nuevo número de página y el mismo término de búsqueda, añadiendo los resultados al final de la lista actual. Esto crea el efecto de scroll infinito, donde a medida que el usuario baja, se van cargando más fotos automáticamente.
                 }
             }
         };
-        
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll); // Limpieza al desmontar
     }, [loading]);
@@ -120,7 +118,7 @@ function Home() {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
                 </div>
             )}
-            
+
             {/* MENSAJE DE RESULTADOS VACÍOS */}
             {!loading && pins.length === 0 && (
                 <p className="text-center text-gray-500 mt-10">

@@ -27,8 +27,7 @@ const Layout = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false); // USAMOS EL CONTEXTO GLOBAL EN LUGAR DEL STATE LOCAL
-    const { searchTerm, setSearchTerm } = useSearch(); /* Verificamos la sesión del usuario al cargar el componente 
-    y nos suscribimos a los cambios de autenticación para mantener el estado del usuario actualizado en tiempo real*/
+    const { searchTerm, setSearchTerm } = useSearch(); 
 
     // Efecto para manejar la autenticación del usuario y actualizar el estado en consecuencia
     React.useEffect(() => {
@@ -143,6 +142,8 @@ const Layout = ({ children }) => {
                         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-all">
                             <svg className={`w-4 h-4 text-gray-600 transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                         </button>
+
+                        {/* Menú desplegable del usuario */}
                         {isMenuOpen && (
                             <div className="absolute right-0 top-14 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 z-[120]">
                                 <div onClick={() => navigate('/perfil')} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer mb-3">
