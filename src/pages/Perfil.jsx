@@ -117,7 +117,7 @@ function Perfil({ user }) {
                                     <Pin pin={pin} />
 
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
-                                    <p className="absolute bottom-20 right-4 bg-amber-200 hover:bg-black p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200">
+                                    <p className="absolute bottom-4 left-4 text-xs text-yellow-500 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                                         {pin?.created_at}
                                     </p>
                                     <button
