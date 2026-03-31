@@ -64,7 +64,7 @@ function Perfil({ user }) {
     // Protección: Si no hay usuario (ej. sesión expirada), mostramos mensaje de aviso
     if (!user) return <div className="p-10 text-center">Inicia sesión para ver tu perfil</div>;
 
-    
+
     return (
         <div className="flex-1 min-h-screen bg-white">
             <main className="p-8">
@@ -117,7 +117,9 @@ function Perfil({ user }) {
                                     <Pin pin={pin} />
 
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
-                                    <p className='color-black'>{pin.created_at}</p>
+                                    <p className="text-yellow-400 text-xs break-all">
+                                        {pin?.created_at}
+                                    </p>
                                     <button
                                         onClick={() => deletePin(pin.id)}
                                         className="absolute bottom-14 right-4 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200"
