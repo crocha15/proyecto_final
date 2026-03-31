@@ -117,9 +117,11 @@ function Perfil({ user }) {
                                     <Pin pin={pin} />
 
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
-                                    <p className="absolute bottom-4 left-4 text-xs text-yellow-500 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {pin?.created_at}
-                                    </p>
+                                    <div className="absolute top-4 left-4 z-30 pointer-events-none">
+                                        <p className="bg-black/50 backdrop-blur-sm text-yellow-400 text-[10px] px-2 py-1 rounded-lg font-mono">
+                                            {pin?.created_at ? new Date(pin.created_at).toLocaleDateString() : 'Sin fecha'}
+                                        </p>
+                                    </div>
                                     <button
                                         onClick={() => deletePin(pin.id)}
                                         className="absolute bottom-14 right-4 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200"
