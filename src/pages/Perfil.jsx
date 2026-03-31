@@ -28,6 +28,7 @@ function Perfil({ user }) {
                 pexels_id: p.pexels_id,
                 image: p.image_url,
                 title: p.title,
+                created_at: p.created_at,
                 saved: true // Marcamos como guardados por defecto al estar en el perfil
             }));
 
