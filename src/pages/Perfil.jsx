@@ -28,7 +28,6 @@ function Perfil({ user }) {
                 pexels_id: p.pexels_id,
                 image: p.image_url,
                 title: p.title,
-                created_at: p.created_at,
                 saved: true // Marcamos como guardados por defecto al estar en el perfil
             }));
 
@@ -45,7 +44,7 @@ function Perfil({ user }) {
         if (user) fetchMisPines();
     }, [user]);
 
-    // --- BLOQUE 2: Eliminar un Pin ---
+    // BLOQUE 2: Eliminar un Pin
     const deletePin = async (id) => {
         // Petición de borrado a Supabase filtrando por el ID único de la fila
         const { error } = await supabase
@@ -118,11 +117,6 @@ function Perfil({ user }) {
                                     <Pin pin={pin} />
 
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
-                                    <div className="absolute top-4 left-4 z-30 pointer-events-none">
-                                        <p className="bg-black/50 backdrop-blur-sm text-yellow-400 text-[10px] px-2 py-1 rounded-lg font-mono">
-                                            {pin?.created_at ? new Date(pin.created_at).toLocaleDateString() : 'Sin fecha'}
-                                        </p>
-                                    </div>
                                     <button
                                         onClick={() => deletePin(pin.id)}
                                         className="absolute bottom-14 right-4 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 border border-gray-200"
