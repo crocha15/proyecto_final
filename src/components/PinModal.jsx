@@ -12,7 +12,7 @@ const PinModal = ({ img, onClose }) => {
         // Contenedor principal: Fondo negro transparente (Overlay)
         // onClick aquí está BIEN, es para que cierre al clicar FUERA de la foto.
         <div
-            className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 cursor-zoom-out transition-opacity duration-300 animate-fadeIn"
+            className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 transition-opacity duration-300 animate-fadeIn"
             onClick={onClose}
         >
             {/* Contenedor de la imagen (LA TARJETA) */}
