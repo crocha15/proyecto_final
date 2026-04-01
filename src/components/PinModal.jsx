@@ -17,18 +17,16 @@ const PinModal = ({ img, onClose }) => {
             {/* Contenedor de la imagen (LA TARJETA) */}
             {/* Agregamos el onClick aquí para detener el burbujeo. */}
             <div
-                className="relative max-w-7xl max-h-[85vh] group rounded-3xl shadow-2xl transition-all duration-300 hover:scale-[1.01]"
+                className="relative max-w-7xl max-h-[95vh] group rounded-3xl shadow-2xl transition-all duration-300 hover:scale-[1.01]"
                 onClick={handleCardClick}
             >
                 <img
                     src={img}
                     alt="Pin ampliado"
-                    // Agregamos cursor-default para que sepan que la imagen en sí no hace nada.
-                    className="w-full h-auto object-contain block rounded-3xl cursor-default"
+                    className="w-full h-auto mb-2 object-contain block rounded-3xl"
                 />
 
                 {/* Botón de cerrar (X) en la esquina superior derecha */}
-                {/* Este botón SÍ debe llamar a onClose al clicar en él. */}
                 <button
                     onClick={onClose}
                     className="absolute -top-3 -right-3 bg-white p-2.5 rounded-full hover:bg-white text-gray-800 shadow-xl transition-all active:scale-90 z-20 group-hover:opacity-100 opacity-90"
