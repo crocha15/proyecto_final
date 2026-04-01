@@ -4,6 +4,8 @@ import { supabase } from '../supabaseClient';
 function Pin({ pin }) {
     const [isSaving, setIsSaving] = useState(false); // Estado para controlar si se está guardando el pin, lo que permite mostrar un indicador de carga y evitar múltiples clics mientras se procesa la acción de guardado
     const [isSaved, setIsSaved] = useState(pin.saved || false);// Estado para controlar si el pin ya está guardado, lo que permite cambiar el estilo del botón y evitar guardar el mismo pin varias veces, mejorando la experiencia del usuario al proporcionar feedback visual sobre el estado de guardado del pin
+    const [isLiked, setIsLiked] = useState(false); // ¿El usuario actual le dio like?
+    const [likeCount, setLikeCount] = useState(0); // ¿Cuántos likes totales tiene?
 
     const handleSave = async (e) => {
         e.stopPropagation(); // Evita que el clic dispare otros eventos del contenedor 
@@ -44,6 +46,32 @@ function Pin({ pin }) {
             setIsSaving(false);
         }
     };
+
+    useEffect(() => {
+        const fetchLikes = async () => {
+            // Traer cuántos likes tiene el pin
+            const { count } = await supabase
+                .from('likes')
+                .select('*', { count: 'exact', head: true })
+                .eq('pin_id', pin.id);
+
+            setLikeCount(count || 0);
+
+            // Verificar si EL USUARIO ACTUAL le dio like
+            if (user) {
+                const { data } = await supabase
+                    .from('likes')
+                    .select('*')
+                    .eq('pin_id', pin.id)
+                    .eq('user_id', user.id)
+                    .single();
+
+                if (data) setIsLiked(true);
+            }
+        };
+
+        fetchLikes();
+    }, [pin.id, user]);
 
     const toggleLike = async () => {
         if (isLiked) {
