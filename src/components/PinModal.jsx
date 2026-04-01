@@ -17,7 +17,7 @@ const PinModal = ({ img, onClose }) => {
             {/* Contenedor de la imagen (LA TARJETA) */}
             {/* Agregamos el onClick aquí para detener el burbujeo. */}
             <div
-                className="relative max-w-7xl max-h-[95vh] group rounded-3xl shadow-2xl transition-all duration-300 hover:scale-[1.01]"
+                className="relative max-w-7xl max-h-[85vh] group rounded-3xl shadow-2xl transition-all duration-300 hover:scale-[1.01]"
                 onClick={handleCardClick}
             >
                 <img
