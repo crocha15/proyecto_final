@@ -4,7 +4,6 @@ const PinModal = ({ img, onClose }) => {
 
     // NUEVA FUNCIÓN: Intercepta el clic en la imagen/tarjeta
     const handleCardClick = (e) => {
-        // Evita que el clic "burbujee" hacia el fondo negro y cierre el modal.
         e.stopPropagation();
     };
 
@@ -19,7 +18,7 @@ const PinModal = ({ img, onClose }) => {
             {/* Agregamos el onClick aquí para detener el burbujeo. */}
             <div
                 className="relative max-w-7xl max-h-[95vh] group rounded-3xl shadow-2xl transition-all duration-300 hover:scale-[1.01]"
-                onClick={handleCardClick} // <--- ¡ESTA ES LA LÍNEA CRÍTICA!
+                onClick={handleCardClick}
             >
                 <img
                     src={img}
@@ -27,14 +26,6 @@ const PinModal = ({ img, onClose }) => {
                     // Agregamos cursor-default para que sepan que la imagen en sí no hace nada.
                     className="w-full h-auto object-contain block rounded-3xl cursor-default"
                 />
-
-                {/* Overlay de hover idéntico al del Pin original */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 flex flex-col justify-between p-6 rounded-3xl">
-                    <div className="flex justify-end">
-                        {/* Aquí puedes poner botones si quieres, recuerda añadirles e.stopPropagation() si tienen lógica */}
-                        <button className="bg-[#E60023] text-white px-6 py-3 rounded-full font-bold shadow-lg text-lg active:scale-95 transition-all">Guardar</button>
-                    </div>
-                </div>
 
                 {/* Botón de cerrar (X) en la esquina superior derecha */}
                 {/* Este botón SÍ debe llamar a onClose al clicar en él. */}
