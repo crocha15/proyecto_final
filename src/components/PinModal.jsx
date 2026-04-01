@@ -2,7 +2,7 @@ import React from 'react';
 
 const PinModal = ({ img, onClose }) => {
 
-    // NUEVA FUNCIÓN: Intercepta el clic en la imagen/tarjeta
+    // FUNCIÓN: Intercepta el clic en la imagen/tarjeta
     const handleCardClick = (e) => {
         e.stopPropagation();
     };

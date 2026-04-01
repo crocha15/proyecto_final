@@ -8,6 +8,7 @@ function Pin({ pin }) {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [user, setUser] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Efecto para obtener el usuario y los likes
     useEffect(() => {
@@ -112,7 +113,8 @@ function Pin({ pin }) {
 
             // 2. AHORA SÍ, USAMOS EL ID DE NUESTRA BASE DE DATOS (dbPin.id)
             if (isLiked) {
-                const { error } = await supabase.from('likes')
+                const { error } = await supabase
+                    .from('likes')
                     .delete()
                     .eq('pin_id', dbPin.id)
                     .eq('user_id', user.id);
@@ -134,9 +136,6 @@ function Pin({ pin }) {
             console.error("Error completo:", err);
         }
     };
-
-    // Para controlar si el modal está abierto
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // FUNCIÓN: Para abrir el modal
     const handleOpenModal = () => {
@@ -207,15 +206,15 @@ function Pin({ pin }) {
                         </div>
                     </div>
                 </div>
+                {/* NUEVO: Renderizado condicional del Modal */}
+                {isModalOpen && (
+                    <PinModal
+                        img={pin.image}
+                        onClose={handleCloseModal}
+                    />
+                )}
             </div>
 
-            {/* NUEVO: Renderizado condicional del Modal */}
-            {isModalOpen && (
-                <PinModal
-                    img={pin.image}
-                    onClose={handleCloseModal}
-                />
-            )}
         </div>
     );
 }
