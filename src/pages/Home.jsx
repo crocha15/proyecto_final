@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Pin from '../components/Pin';
 import { useSearch } from '../components/SearchContext'; // Hook para acceder al término de búsqueda global
 
-function Home() {
+function Home({ user }) {
 
     const { searchTerm } = useSearch();        // Obtiene lo que el usuario escribe en la barra de búsqueda (Contexto)
     const [pins, setPins] = useState([]);      // Almacena la lista de fotos/pines a mostrar
@@ -65,7 +65,7 @@ function Home() {
     // Este efecto se dispara cada vez que cambia 'searchTerm'
     useEffect(() => {
         /* Debounce: Esperamos 300ms después de que el usuario deje de escribir para disparar la API.
-        Esto ahorra muchísimas peticiones innecesarias. */ 
+        Esto ahorra muchísimas peticiones innecesarias. */
         const delayDebounceFn = setTimeout(() => {
             setPage(1); // Reiniciamos a la página 1 para una nueva búsqueda
             fetchPexelsPhotos(1, true, searchTerm);
@@ -108,7 +108,11 @@ function Home() {
             <div className="columns-2 md:columns-4 lg:columns-6 gap-4 space-y-4">
                 {pins.map((pin, index) => (
                     // Renderizamos cada Pin. Usamos index en la key para evitar conflictos si hay IDs repetidos
-                    <Pin key={`${pin.id}-${index}`} pin={pin} onSavePin={() => { }} />
+                    <Pin
+                        key={`${pin.id}-${index}`}
+                        pin={pin}
+                        user={user}
+                        onSavePin={() => { }} />
                 ))}
             </div>
 

@@ -78,33 +78,59 @@ function Pin({ pin }) {
     };
 
     const toggleLike = async (e) => {
-        e.stopPropagation(); // Evita que al dar like se abra el pin (si tuvieras esa lógica)
+        e.preventDefault();
+        e.stopPropagation();
 
-        if (!user) {
-            alert("Debes iniciar sesión para dar me gusta");
-            return;
-        }
+        if (!user) return alert("Debes iniciar sesión");
 
-        if (isLiked) {
-            const { error } = await supabase
-                .from('likes')
-                .delete()
-                .eq('pin_id', pin.id)
-                .eq('user_id', user.id);
+        try {
+            // 1. BUSCAR O CREAR el pin en la tabla 'pines' primero
+            // Esto es necesario porque no puedes dar like a un ID de Pexels directamente
+            let { data: dbPin } = await supabase
+                .from('pines')
+                .select('id')
+                .eq('pexels_id', pin.id.toString())
+                .single();
 
-            if (!error) {
-                setLikeCount(prev => prev - 1);
-                setIsLiked(false);
+            if (!dbPin) {
+                // Si el pin no existe en nuestra DB, lo insertamos silenciosamente
+                const { data: newPin, error: insertError } = await supabase
+                    .from('pines')
+                    .insert([{
+                        user_id: user.id, // El primer like lo registra como "creador"
+                        image_url: pin.image,
+                        title: pin.title || 'Sin título',
+                        pexels_id: pin.id.toString()
+                    }])
+                    .select()
+                    .single();
+
+                if (insertError) throw insertError;
+                dbPin = newPin;
             }
-        } else {
-            const { error } = await supabase
-                .from('likes')
-                .insert({ pin_id: pin.id, user_id: user.id });
 
-            if (!error) {
-                setLikeCount(prev => prev + 1);
-                setIsLiked(true);
+            // 2. AHORA SÍ, USAMOS EL ID DE NUESTRA BASE DE DATOS (dbPin.id)
+            if (isLiked) {
+                const { error } = await supabase.from('likes')
+                    .delete()
+                    .eq('pin_id', dbPin.id)
+                    .eq('user_id', user.id);
+
+                if (!error) {
+                    setLikeCount(prev => prev - 1);
+                    setIsLiked(false);
+                }
+            } else {
+                const { error } = await supabase.from('likes')
+                    .insert({ pin_id: dbPin.id, user_id: user.id });
+
+                if (!error) {
+                    setLikeCount(prev => prev + 1);
+                    setIsLiked(true);
+                }
             }
+        } catch (err) {
+            console.error("Error completo:", err);
         }
     };
 

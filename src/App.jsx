@@ -37,7 +37,7 @@ function App() {
         {/* 2. El Layout envuelve las rutas */}
         <Layout user={user}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home user={user} />} />
             <Route path="/perfil" element={<Perfil user={user} />} />
             <Route path="/crear-pin" element={<CrearPin user={user} />} />
           </Routes>
