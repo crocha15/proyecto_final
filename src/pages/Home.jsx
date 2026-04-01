@@ -61,7 +61,6 @@ function Home({ user }) {
         }
     };
 
-    // --- EFECTO 1: Búsqueda reactiva con Debounce ---
     // Este efecto se dispara cada vez que cambia 'searchTerm'
     useEffect(() => {
         /* Debounce: Esperamos 300ms después de que el usuario deje de escribir para disparar la API.
@@ -78,7 +77,7 @@ function Home({ user }) {
         };
     }, [searchTerm]);
 
-    // --- EFECTO 2: Carga por cambio de página (Scroll) ---
+    // Carga por cambio de página (Scroll)
     // Se dispara cuando 'page' aumenta
     useEffect(() => {
         if (page > 1) {

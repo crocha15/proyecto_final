@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import PinModal from './PinModal';
 
 function Pin({ pin }) {
     const [isSaving, setIsSaving] = useState(false);
     const [isSaved, setIsSaved] = useState(pin.saved || false);
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
-    // Agregamos un estado interno para el usuario si no viene por props
     const [user, setUser] = useState(null);
 
     // Efecto para obtener el usuario y los likes
@@ -19,7 +19,7 @@ function Pin({ pin }) {
             // 2. Traer cuántos likes tiene el pin
             const { count } = await supabase
                 .from('likes')
-                .select('*', { count: 'exact', head: true })
+                .select('*', { count: 'exact', head: true }) // Solo queremos el conteo, no los datos completos
                 .eq('pin_id', pin.id);
 
             setLikeCount(count || 0);
@@ -31,17 +31,17 @@ function Pin({ pin }) {
                     .select('*')
                     .eq('pin_id', pin.id)
                     .eq('user_id', currentUser.id)
-                    .single();
+                    .single(); // Usamos .single() porque esperamos solo un resultado (o ninguno)
 
-                if (data) setIsLiked(true);
+                if (data) setIsLiked(true); // Si encontramos un registro, el usuario ya le dio like
             }
         };
-
-        getInitialData();
+        getInitialData(); // Ejecutamos la función para cargar los datos iniciales
     }, [pin.id]);
 
+    // Función para guardar el pin en la base de datos de Supabase
     const handleSave = async (e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Evita que el clic en "Guardar" active otros eventos (como abrir el pin)
 
         if (isSaved) return;
         setIsSaving(true);
@@ -77,8 +77,9 @@ function Pin({ pin }) {
         }
     };
 
+    // Función para dar like o quitar like a un pin
     const toggleLike = async (e) => {
-        e.preventDefault();
+        e.preventDefault();  // Evita que el clic en el botón de like active otros eventos (como abrir el pin)
         e.stopPropagation();
 
         if (!user) return alert("Debes iniciar sesión");
@@ -132,6 +133,19 @@ function Pin({ pin }) {
         } catch (err) {
             console.error("Error completo:", err);
         }
+    };
+
+    // Para controlar si el modal está abierto
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // FUNCIÓN: Para abrir el modal
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    // FUNCIÓN: Para cerrar el modal
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -193,6 +207,56 @@ function Pin({ pin }) {
                     </div>
                 </div>
             </div>
+
+            {/* Contenedor del Pin (agregamos el onClick aquí) */}
+            <div
+                className="break-inside-avoid mb-4 group relative cursor-zoom-in transition-transform duration-500 hover:scale-[1.02]"
+                onClick={handleOpenModal} // <--- NUEVO CLIC PARA AMPLIAR
+            >
+                <div className="relative overflow-hidden rounded-3xl bg-gray-200 shadow-md">
+                    <img src={pin.image} alt={pin.title} className="w-full h-auto block object-cover group-hover:brightness-90 transition duration-300" />
+
+                    {/* Overlay de interacción (ya lo tenías) */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 bg-black/20 z-10">
+
+                        {/* Botón Guardar */}
+                        <div className="flex justify-end">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); handleSave(e); }} // <--- IMPORTANTE: stopPropagation para no abrir el modal
+                                disabled={isSaving || isSaved}
+                                className={`px-6 py-3 rounded-full font-bold text-base shadow-lg active:scale-90 transition-all 
+                                ${isSaved ? 'bg-black text-white' : 'bg-[#E60023] text-white hover:bg-[#ad001a]'}`}>
+                                {isSaving ? '...' : isSaved ? 'Guardado' : 'Guardar'}
+                            </button>
+                        </div>
+
+                        {/* Botón Like y otros */}
+                        <div className="flex justify-between items-end">
+                            <div
+                                onClick={(e) => { e.stopPropagation(); toggleLike(e); }} // <--- IMPORTANTE: stopPropagation para no abrir el modal
+                                className="flex items-center gap-1 bg-white/95 px-3 py-1.5 rounded-full shadow-md hover:bg-white transition-all cursor-pointer z-20 active:scale-90"
+                            >
+                                {/* SVG del Corazón y LikeCount */}
+                            </div>
+
+                            {/* Botones inferiores estéticos */}
+                            <div className="flex gap-2 z-20">
+                                <div className="bg-white/95 p-2 rounded-full hover:bg-white shadow-md">
+                                    {/* SVG de compartir */}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* NUEVO: Renderizado condicional del Modal */}
+            {isModalOpen && (
+                <PinModal
+                    img={pin.image}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     );
 }

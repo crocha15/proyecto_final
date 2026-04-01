@@ -32,9 +32,7 @@ function App() {
 
   return (
     <SearchProvider>
-      {/* 1. Usamos solo el componente 'Router' (que es BrowserRouter) */}
       <Router>
-        {/* 2. El Layout envuelve las rutas */}
         <Layout user={user}>
           <Routes>
             <Route path="/" element={<Home user={user} />} />

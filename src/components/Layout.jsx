@@ -92,17 +92,20 @@ const Layout = ({ children }) => {
             {/* --- MENÚ CREAR --- */}
             {isCreateMenuOpen && (
                 <div className="fixed left-0 md:left-20 top-0 bottom-0 w-full md:w-80 bg-white border-r border-gray-100 p-6 z-[70] overflow-y-auto">
+
+                    {/* El menú de creación se muestra como una barra lateral que se superpone al contenido principal */}
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-xl font-semibold">Crear</h2>
                         <button onClick={toggleCreateMenu} className="p-2 hover:bg-gray-100 rounded-full text-gray-500">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l18 18"></path></svg>
                         </button>
                     </div>
+                    {/* Opciones de creación: Pin, Tablero, Collage, cada una con su ícono y descripción, y que navega a la página correspondiente al hacer clic en ella */ }
                     <div className="space-y-4">
                         <CreateMenuItem
                             title="Pin"
                             description="Publica tus fotos..."
-                            icon={<img src={Pin_icon} className="w-10 h-10" />}
+                            icon={<img src={Pin_icon} className="w-6 h-6" />}
                             onClick={() => { navigate('/crear-pin'); setIsCreateMenuOpen(false); }}
                         />
                         <CreateMenuItem
@@ -134,6 +137,7 @@ const Layout = ({ children }) => {
                         />
                         <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </div>
+                    
                     {/* El menú de usuario muestra el avatar del usuario autenticado y un menú desplegable con opciones para ver el perfil y cerrar sesión, lo que permite al usuario acceder fácilmente a su información y gestionar su cuenta desde cualquier página de la aplicación */}
                     <div className="relative z-[110] flex items-center gap-2">
                         <button onClick={() => navigate('/perfil')} className="w-12 h-12 rounded-full overflow-hidden border-2 border-transparent hover:border-gray-200 transition-all">
@@ -170,7 +174,7 @@ const Layout = ({ children }) => {
                                     Configuración
                                 </button>
                                 <div className="border-t border-gray-100 mb-3"></div>
-                                <LogOut />
+                                <LogOut /> {/* Componente para cerrar sesión */ }
                             </div>
                         )}
                     </div>
