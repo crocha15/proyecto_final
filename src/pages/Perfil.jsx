@@ -118,7 +118,7 @@ function Perfil({ user }) {
                             {misPines.map((pin) => (
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
-                                    <div className='bg-black text-yellow-400'>
+                                    <div className='absolute top-2 left-4 z-50 bg-black text-yellow-400'>
                                         <p>
                                             {pin?.created_at}
                                         </p>
