@@ -122,7 +122,7 @@ function Perfil({ user }) {
 
                                     <div className='absolute top-4 left-4 z-50 bg-black'>
                                         <p className='bg-black text-yellow-400 text-[10px]'>
-                                            {pin?.fecha ? new Date(pin.created_at).toLocaleDateString(): 'sin fecha'}
+                                            {pin?.fecha ? new Date(pin.fecha).toLocaleDateString(): 'sin fecha'}
                                         </p>
                                     </div>
 
