@@ -36,7 +36,7 @@ const MobileLayout = ({ children, user }) => {
 
             {/* --- CONTENIDO --- */}
             <main className="flex-1 mt-24 mb-20 px-2">
-                {children}
+                {children} 
             </main>
 
             {/* --- NAVEGACIÓN INFERIOR --- */}

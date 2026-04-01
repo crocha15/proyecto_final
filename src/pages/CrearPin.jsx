@@ -17,8 +17,8 @@ const CrearPin = ({ user }) => {
     // Se usa para disparar la selección de archivos al hacer clic en el área de diseño.
     const fileInputRef = useRef(null);
 
-    // --- MANEJO DE ARCHIVOS ---
 
+    // MANEJO DE ARCHIVOS 
     // Procesa el archivo seleccionado (vía input o vía drag & drop)
     const processFile = (file) => {
         if (file) {
@@ -59,14 +59,14 @@ const CrearPin = ({ user }) => {
                     }
                 ]);
 
-            if (error) throw error; // Si Supabase devuelve error, se captura en el catch
+            if (error) throw error;
 
             alert("¡Pin creado con éxito!");
-            navigate('/perfil'); // Redirige al perfil para ver el nuevo Pin
+            navigate('/perfil');
         } catch (error) {
             alert("Error al guardar: " + error.message);
         } finally {
-            setLoading(false); // Libera el botón al finalizar (éxito o error)
+            setLoading(false); // Libera el botón al finalizar
         }
     };
 

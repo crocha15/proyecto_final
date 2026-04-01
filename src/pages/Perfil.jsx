@@ -28,6 +28,7 @@ function Perfil({ user }) {
                 pexels_id: p.pexels_id,
                 image: p.image_url,
                 title: p.title,
+                fecha: p.created_at,
                 saved: true // Marcamos como guardados por defecto al estar en el perfil
             }));
         
@@ -117,7 +118,11 @@ function Perfil({ user }) {
                             {misPines.map((pin) => (
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
-
+                                    <div className='bg-black text-yellow-400'>
+                                        <p>
+                                            {pin?.created_at}
+                                        </p>
+                                    </div>
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
                                     <button
                                         onClick={() => deletePin(pin.id)}

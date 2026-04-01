@@ -92,7 +92,7 @@ function Registrate({ isOpen, onClose, onOpenLogin }) {
                             type="email"
                             placeholder="Correo electrónico"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)} 
                             className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-red-500 outline-none"
                             required
                         />
