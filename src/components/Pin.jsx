@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../supabaseClient'; 
+import { supabase } from '../supabaseClient';
 
 function Pin({ pin }) {
     const [isSaving, setIsSaving] = useState(false); // Estado para controlar si se está guardando el pin, lo que permite mostrar un indicador de carga y evitar múltiples clics mientras se procesa la acción de guardado
@@ -45,6 +45,20 @@ function Pin({ pin }) {
         }
     };
 
+    const toggleLike = async () => {
+        if (isLiked) {
+            // Si ya tiene like, lo borramos (Unlike)
+            await supabase.from('likes').delete().eq('pin_id', pin.id).eq('user_id', user.id);
+            setLikeCount(prev => prev - 1);
+            setIsLiked(false);
+        } else {
+            // Si no tiene, lo creamos
+            await supabase.from('likes').insert({ pin_id: pin.id, user_id: user.id });
+            setLikeCount(prev => prev + 1);
+            setIsLiked(true);
+        }
+    };
+
     return (
         // El componente Pin muestra una imagen con un overlay que aparece al hacer hover, permitiendo al usuario guardar el pin en su cuenta de Supabase. El botón de guardado cambia su estado y estilo según si el pin ya está guardado o si se está procesando la acción, proporcionando una experiencia de usuario interactiva y visualmente atractiva.
         <div className="break-inside-avoid mb-4 group relative cursor-pointer transition-transform duration-500 hover:scale-[1.02]">
@@ -85,6 +99,21 @@ function Pin({ pin }) {
                             </svg>
                         </div>
                     </div>
+
+                    {/* Botón de Like (Me gusta) con contador, que cambia su estilo y funcionalidad según si el usuario ya ha dado like al pin o no, proporcionando una interacción adicional para los usuarios que desean expresar su aprecio por el contenido del pin. */}
+                    <div className="flex items-center gap-1">
+                        <button onClick={toggleLike}>
+                            <svg
+                                className={`w-6 h-6 ${isLiked ? 'fill-red-600 text-red-600' : 'text-gray-600'}`}
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                        </button>
+                        <span className="text-sm font-bold">{likeCount}</span>
+                    </div>
+
                 </div>
             </div>
         </div>

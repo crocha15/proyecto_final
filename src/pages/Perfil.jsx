@@ -30,7 +30,7 @@ function Perfil({ user }) {
                 title: p.title,
                 saved: true // Marcamos como guardados por defecto al estar en el perfil
             }));
-
+        
             setMisPines(pinesAdaptados);
         } catch (error) {
             console.error('Error al obtener pines:', error.message);
@@ -47,8 +47,8 @@ function Perfil({ user }) {
     // BLOQUE 2: Eliminar un Pin
     const deletePin = async (id) => {
         // Petición de borrado a Supabase filtrando por el ID único de la fila
-        const { error } = await supabase
-            .from('pines')
+        const { error } = await supabase 
+            .from('pines') 
             .delete()
             .eq('id', id);
 
@@ -61,7 +61,7 @@ function Perfil({ user }) {
         }
     };
 
-    // Protección: Si no hay usuario (ej. sesión expirada), mostramos mensaje de aviso
+    // Protección: Si no hay usuario mostramos mensaje de aviso
     if (!user) return <div className="p-10 text-center">Inicia sesión para ver tu perfil</div>;
 
 
@@ -80,6 +80,8 @@ function Perfil({ user }) {
                             referrerPolicy="no-referrer"
                         />
                     </div>
+
+                    {/* // Mostramos el nombre completo si está disponible, o el email como fallback */}
                     <h1 className="text-3xl font-bold text-gray-900">
                         {user.user_metadata?.full_name || 'Usuario'}
                     </h1>
