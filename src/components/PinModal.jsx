@@ -14,7 +14,7 @@ const PinModal = ({ img, onClose }) => {
         >
             {/* Contenedor de la imagen con hover */}
             <div
-                className="relative max-w-7xl max-h-[90vh] group overflow-hidden rounded-3xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
+                className="relative max-w-7xl max-h-[90vh] group overflow-hidden rounded-3xl shadow-2xl transition-transform duration-300"
                 onClick={handleImageClick} // Evita el cierre al clicar la imagen
             >
                 <img
