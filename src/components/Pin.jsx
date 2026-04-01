@@ -79,7 +79,7 @@ function Pin({ pin }) {
 
     const toggleLike = async (e) => {
         e.stopPropagation(); // Evita que al dar like se abra el pin (si tuvieras esa lógica)
-        
+
         if (!user) {
             alert("Debes iniciar sesión para dar me gusta");
             return;
@@ -109,7 +109,7 @@ function Pin({ pin }) {
     };
 
     return (
-        
+
         <div className="break-inside-avoid mb-4 group relative cursor-pointer transition-transform duration-500 hover:scale-[1.02]">
             {/* La imagen del pin se muestra siempre, pero los botones solo aparecen al hacer hover gracias a 'group-hover' */}
             <div className="relative overflow-hidden rounded-3xl bg-gray-200 shadow-md">
@@ -137,17 +137,19 @@ function Pin({ pin }) {
                     {/* Contenedor de botones de Like y Compartir, siempre visible al hacer hover, pero con un fondo semitransparente para mejorar la legibilidad sobre la imagen */}
                     <div className="flex justify-between items-end">
                         {/* Botón de Like con contador movido aquí para que no choque con los otros botones */}
-                        <div className="flex items-center gap-1 bg-white/90 px-2 py-1 rounded-full shadow-sm">
-                            <button onClick={toggleLike} className="flex items-center">
-                                <svg
-                                    className={`w-6 h-6 transition-colors ${isLiked ? 'fill-red-600 text-red-600' : 'text-gray-600'}`}
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                </svg>
-                            </button>
-                            <span className="text-sm font-bold text-gray-800">{likeCount}</span>
+                        {/* BOTÓN DE LIKE: Ahora con z-20 para estar sobre el overlay */}
+                        <div
+                            onClick={toggleLike}
+                            className="flex items-center gap-1 bg-white/95 px-3 py-1.5 rounded-full shadow-md hover:bg-white transition-all cursor-pointer z-20 active:scale-90"
+                        >
+                            <svg
+                                className={`w-6 h-6 transition-colors ${isLiked ? 'fill-red-600 text-red-600' : 'text-gray-600'}`}
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                            <span className="text-sm font-bold text-gray-800 select-none">{likeCount}</span>
                         </div>
                         {/* Botones de Compartir y Más opciones, siempre visibles al hacer hover, pero con un fondo semitransparente para mejorar la legibilidad sobre la imagen */}
                         <div className="flex gap-2">
