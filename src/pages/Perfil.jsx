@@ -118,11 +118,14 @@ function Perfil({ user }) {
                             {misPines.map((pin) => (
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
-                                    <div className='absolute top-2 left-4 z-50 bg-black text-yellow-400'>
-                                        <p className='text-[10px]'>
-                                            {pin?.created_at? new Date(pin.created_at).toLocaleDateString(): 'no tiene fecha'}
+
+
+                                    <div className='absolute top-4 left-4 z-50 bg-black'>
+                                        <p className='bg-black text-yellow-400 text-[10px]'>
+                                            {pin?.fecha ? new Date(pin.created_at).toLocaleDateString(): 'sin fecha'}
                                         </p>
                                     </div>
+
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
                                     <button
                                         onClick={() => deletePin(pin.id)}
