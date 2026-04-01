@@ -150,7 +150,8 @@ function Pin({ pin }) {
 
     return (
 
-        <div className="break-inside-avoid mb-4 group relative cursor-pointer transition-transform duration-500 hover:scale-[1.02]">
+        <div className="break-inside-avoid mb-4 group relative cursor-pointer transition-transform duration-500 hover:scale-[1.02]
+            " onClick={handleOpenModal}>
             {/* La imagen del pin se muestra siempre, pero los botones solo aparecen al hacer hover gracias a 'group-hover' */}
             <div className="relative overflow-hidden rounded-3xl bg-gray-200 shadow-md">
                 <img
@@ -202,48 +203,6 @@ function Pin({ pin }) {
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                                 </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Contenedor del Pin (agregamos el onClick aquí) */}
-            <div
-                className="break-inside-avoid mb-4 group relative cursor-zoom-in transition-transform duration-500 hover:scale-[1.02]"
-                onClick={handleOpenModal} // <--- NUEVO CLIC PARA AMPLIAR
-            >
-                <div className="relative overflow-hidden rounded-3xl bg-gray-200 shadow-md">
-                    <img src={pin.image} alt={pin.title} className="w-full h-auto block object-cover group-hover:brightness-90 transition duration-300" />
-
-                    {/* Overlay de interacción (ya lo tenías) */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4 bg-black/20 z-10">
-
-                        {/* Botón Guardar */}
-                        <div className="flex justify-end">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); handleSave(e); }} // <--- IMPORTANTE: stopPropagation para no abrir el modal
-                                disabled={isSaving || isSaved}
-                                className={`px-6 py-3 rounded-full font-bold text-base shadow-lg active:scale-90 transition-all 
-                                ${isSaved ? 'bg-black text-white' : 'bg-[#E60023] text-white hover:bg-[#ad001a]'}`}>
-                                {isSaving ? '...' : isSaved ? 'Guardado' : 'Guardar'}
-                            </button>
-                        </div>
-
-                        {/* Botón Like y otros */}
-                        <div className="flex justify-between items-end">
-                            <div
-                                onClick={(e) => { e.stopPropagation(); toggleLike(e); }} // <--- IMPORTANTE: stopPropagation para no abrir el modal
-                                className="flex items-center gap-1 bg-white/95 px-3 py-1.5 rounded-full shadow-md hover:bg-white transition-all cursor-pointer z-20 active:scale-90"
-                            >
-                                {/* SVG del Corazón y LikeCount */}
-                            </div>
-
-                            {/* Botones inferiores estéticos */}
-                            <div className="flex gap-2 z-20">
-                                <div className="bg-white/95 p-2 rounded-full hover:bg-white shadow-md">
-                                    {/* SVG de compartir */}
-                                </div>
                             </div>
                         </div>
                     </div>
