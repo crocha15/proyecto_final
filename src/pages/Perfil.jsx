@@ -120,7 +120,7 @@ function Perfil({ user }) {
                                     <Pin pin={pin} />
                                     <div className='absolute top-2 left-4 z-50 bg-black text-yellow-400'>
                                         <p className='text-[10px]'>
-                                            {pin?.created_at}
+                                            {pin?.created_at? new Date(pin.created_at).toLocaleDateString(): 'no tiene fecha'}
                                         </p>
                                     </div>
                                     {/* Botón de eliminación solo visible al hacer hover sobre el Pin */}
