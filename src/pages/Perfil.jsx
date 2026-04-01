@@ -119,7 +119,7 @@ function Perfil({ user }) {
                                 <div key={pin.id} className="relative group">
                                     <Pin pin={pin} />
                                     <div className='absolute top-2 left-4 z-50 bg-black text-yellow-400'>
-                                        <p>
+                                        <p className='text-[10px]'>
                                             {pin?.created_at}
                                         </p>
                                     </div>
